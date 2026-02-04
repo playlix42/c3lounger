@@ -1,6 +1,6 @@
-#progress {
+/*#progress {
     pointer-events: none;
-}
+}*/
 
 
 @media (min-width: 801px) {
@@ -102,4 +102,70 @@ tr.history {
     font-weight: bold;
   }
 }
+input[type="range"] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
 
+input[type="range"]::-moz-range-track {
+    height: 0.5rem;
+    background: #ddd;
+    border-radius: 3px;
+}
+
+/*input[type="range"]#progress::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    background: linear-gradient(to right, #286cff 50%, #ddd 50%);
+    border-radius: 3px;
+}*/
+@media all and (-webkit-min-device-pixel-ratio:0) {
+    input[type="range"] {
+        height: 0.5rem;
+    }
+}
+
+input[type="range"]::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+    height: 0.5rem;
+}
+
+input[type="range"]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+input[type="range"]:focus::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-progress {
+    height: 0.5rem;
+    background: #286cff;
+    border-radius: 3px;
+}
+
+input[type="range"]::-ms-fill-lower {
+    background: #286cff;
+    border-radius: 3px;
+}
+
+input[type="range"]:focus::-ms-fill-lower {
+    background: #286cff;
+    border-radius: 3px;
+}
+
+input[type="range"]#progress::-moz-range-thumb {
+    opacity: 0;
+}
+
+input[type="range"]#progress::-webkit-slider-thumb {
+    opacity: 0;
+}
+
+input[type="range"]#progress::-ms-thumb {
+    opacity: 0;
+}

@@ -155,6 +155,10 @@ async function updateTrackPosition(duration, initialElapsed) {
         progress.value = elapsed;
         elapsed += 1;
         position.innerHTML = convertTime(elapsed) + " / " + convertTime(duration);
+        if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
+            const percent = elapsed / duration * 100;
+            progress.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
+        }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
@@ -232,6 +236,10 @@ volumeslider.addEventListener("input", function() {
     audio.volume = Math.min(1, Math.max(0, gain));
     localStorage.setItem("volume", audio.volume)
     localStorage.setItem("volumeSlider", linearValue);
+    if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
+        const percent = linearValue * 100;
+        volumeslider.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
+    }
 })
 
 const volume = localStorage.getItem("volume");
@@ -264,3 +272,8 @@ audio.addEventListener("stalled", function() {
     console.warn("Audio playback stalled, restarting...");
     audiorestart().then(r => {});
 })
+
+if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
+    const percent = volumeslider.value * 100;
+    volumeslider.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
+}
