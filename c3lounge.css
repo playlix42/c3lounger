@@ -4,6 +4,10 @@
 
 
 @media (min-width: 801px) {
+    #playpause {
+        width: 100%;
+    }
+
     #playlist {
         border-collapse: separate;
         border-radius: 6px;
