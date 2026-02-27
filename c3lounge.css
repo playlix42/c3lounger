@@ -2,6 +2,9 @@
     pointer-events: none;
 }*/
 
+#playarea>tbody>tr>td {
+    text-align: center;
+}
 
 @media (min-width: 801px) {
     #playpause {
