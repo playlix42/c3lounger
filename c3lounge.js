@@ -119,6 +119,12 @@ function createEntry(index, entryData) {
     addCell(entryData.startUnix, entry, "Start");
     addCell(entryData.endUnix, entry, "End");
 
+    // the further back the entry is, the more faded it should be (hover will show full opacity)
+    if (index > 0) {
+        const opacity = Math.max(0.2, 1 - index * 0.2);
+        entry.style.opacity = opacity.toString();
+    }
+
     return entry;
 }
 function displayData(data) {

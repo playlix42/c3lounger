@@ -2,8 +2,23 @@
     pointer-events: none;
 }*/
 
+#playarea>tbody>tr>td {
+    text-align: center;
+}
+
+#positiondata {
+    font-family: monospace;
+}
 
 @media (min-width: 801px) {
+    #playarea {
+        width: 100%;
+    }
+
+    #playpause {
+        width: 100%;
+    }
+
     #playlist {
         border-collapse: separate;
         border-radius: 6px;
@@ -21,6 +36,16 @@ tr.now {
 
 tr.history {
     background: #ff7a70;
+}
+
+/* support glue for fancy opacity transitions for history elements */
+#playlist tr {
+    transition: opacity 0.5s ease, background 0.5s ease;
+    opacity: 1;
+}
+#playlist tr:hover {
+    background: transparent; /* for better readability and accessability */
+    opacity: 1 !important; /* yeah, sorry for the !important, but otherwise we cannot overrule the JS calculated opacity */
 }
 
 @media (prefers-color-scheme: dark) {
