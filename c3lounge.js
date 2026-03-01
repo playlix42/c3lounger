@@ -1,7 +1,7 @@
 function httpGet(url, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             callback(xhr.responseText);
         }
@@ -96,12 +96,17 @@ function addCell(text, parent, columnName) {
 }
 
 function addCellWithLink(text, link, parent, columnName) {
+    let jail = window.location.search.includes("jail"); // in case we are in jail mode, do not actually create working links
     let cell = document.createElement("td");
-    let cellLink = document.createElement("a");
-    cellLink.href = link;
-    cellLink.innerText = text;
-    cell.appendChild(cellLink);
     cell.setAttribute("data-label", columnName);
+    if (jail) {
+        cell.innerText = text;
+    } else {
+        let cellLink = document.createElement("a");
+        cellLink.href = link;
+        cellLink.innerText = text;
+        cell.appendChild(cellLink);
+    }
     parent.appendChild(cell);
     return
 }
@@ -178,8 +183,8 @@ async function resyncProgress() {
         stopped = false;
         const data = await response.json();
         const parsed = fetchData(data);
-        resyncTimer = setTimeout(resyncProgress, 60000*15);
-        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => {});
+        resyncTimer = setTimeout(resyncProgress, 60000 * 15);
+        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => { });
     } catch (err) {
         console.error("Resync error:", err);
         resyncTimer = setTimeout(resyncProgress, 60000);
@@ -195,22 +200,22 @@ async function requestAPI() {
         displayData(parsed);
         const delay = parsed.remaining;
         nextTimer = setTimeout(requestAPI, (delay + 30) * 1000);
-        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => {});
-        resyncTimer = setTimeout(resyncProgress, 60000*15);
+        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => { });
+        resyncTimer = setTimeout(resyncProgress, 60000 * 15);
     } catch (err) {
         console.error("API error:", err);
         nextTimer = setTimeout(requestAPI, 300000);
     }
 }
-async function playpauseaction () {
+async function playpauseaction() {
 
 }
 let playpause = document.getElementById("playpause");
-playpause.addEventListener("click", function() {
+playpause.addEventListener("click", function () {
     const audio = document.getElementById("audio");
     if (audio.paused) {
         stopped = false;
-        requestAPI().then(r => {});
+        requestAPI().then(r => { });
         audio.src = "";
         audio.load();
         audio.src = "https://live.c3lounge.de/listen/c3lounge_radio/192.mp3";
@@ -232,7 +237,7 @@ const volumeslider = document.getElementById("volume");
 const minGain = 0.001;
 const maxGain = 1;
 
-volumeslider.addEventListener("input", function() {
+volumeslider.addEventListener("input", function () {
     const linearValue = parseFloat(this.value);
     if (linearValue <= 0) {
         audio.volume = 0;
@@ -269,14 +274,14 @@ async function audiorestart() {
     //requestAPI().then(r => {});
 }
 
-audio.addEventListener("error", function() {
+audio.addEventListener("error", function () {
     console.error("Audio playback error:", audio.error);
-    audiorestart().then(r => {});
+    audiorestart().then(r => { });
 })
 
-audio.addEventListener("stalled", function() {
+audio.addEventListener("stalled", function () {
     console.warn("Audio playback stalled, restarting...");
-    audiorestart().then(r => {});
+    audiorestart().then(r => { });
 })
 
 if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
