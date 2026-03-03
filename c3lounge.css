@@ -19,6 +19,20 @@ tr.history {
     background: #ff7a70;
 }
 
+/* support glue for fancy opacity transitions for history elements */
+#playlist tr {
+    transition: opacity 0.5s ease, background 0.5s ease;
+    opacity: 1;
+}
+#playlist tr:hover {
+    background: transparent; /* for better readability and accessability */
+    opacity: 1 !important; /* yeah, sorry for the !important, but otherwise we cannot overrule the JS calculated opacity */
+}
+
+#repolink {
+    color: #84858b;
+}
+
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #34353b;
@@ -30,4 +44,124 @@ tr.history {
     #playlist {
         border-color: #555;
     }
+    #repolink {
+        color: #202020;
+    }
+}
+@media (max-width: 800px) {
+    .list-table table,
+    .list-table thead,
+    .list-table tbody,
+    .list-table td,
+    .list-table th,
+    .list-table tr {
+        display: block;
+    }
+
+    .list-table table {
+        border: none;
+    }
+
+    .list-table thead  {
+        display: none;
+    }
+
+    .list-table tr {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+    }
+
+    .list-table td {
+        display: flex;
+        justify-content: space-between;
+        
+    }
+
+    .list-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+    }
+}
+
+@media (max-width: 768px) {
+  /* Tabelle als Block darstellen */
+  .control-table table,
+  .control-table thead,
+  .control-table tbody,
+  .control-table tr,
+  .control-table td,
+  .control-table th {
+    display: block;      /* alle Elemente blocken */
+  }
+
+  .control-table thead {
+    display: none;       /* optional: Header ausblenden */
+  }
+
+  .control-table tr {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+  }
+
+  .control-table td {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .control-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+  }
+}
+input[type="range"] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 0.5rem;
+    background: #ddd;
+    border-radius: 3px;
+}
+
+@media all and (-webkit-min-device-pixel-ratio:0) {
+    input[type="range"] {
+        height: 0.5rem;
+    }
+}
+
+input[type="range"]::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+    height: 0.5rem;
+}
+
+input[type="range"]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+input[type="range"]:focus::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-progress {
+    height: 0.5rem;
+    background: #286cff;
+    border-radius: 3px;
+}
+
+input[type="range"]::-ms-fill-lower {
+    background: #286cff;
+    border-radius: 3px;
+}
+
+input[type="range"]:focus::-ms-fill-lower {
+    background: #286cff;
+    border-radius: 3px;
 }
