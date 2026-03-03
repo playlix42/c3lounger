@@ -139,11 +139,6 @@ input[type="range"]::-moz-range-track {
     border-radius: 3px;
 }
 
-/*input[type="range"]#progress::-webkit-slider-runnable-track {
-    height: 0.5rem;
-    background: linear-gradient(to right, #286cff 50%, #ddd 50%);
-    border-radius: 3px;
-}*/
 @media all and (-webkit-min-device-pixel-ratio:0) {
     input[type="range"] {
         height: 0.5rem;
@@ -181,16 +176,4 @@ input[type="range"]::-ms-fill-lower {
 input[type="range"]:focus::-ms-fill-lower {
     background: #286cff;
     border-radius: 3px;
-}
-
-input[type="range"]#progress::-moz-range-thumb {
-    opacity: 0;
-}
-
-input[type="range"]#progress::-webkit-slider-thumb {
-    opacity: 0;
-}
-
-input[type="range"]#progress::-ms-thumb {
-    opacity: 0;
 }

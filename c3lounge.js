@@ -161,7 +161,6 @@ async function updateTrackPosition(duration, initialElapsed) {
     const position = document.getElementById("positiondata");
     let elapsed = initialElapsed;
     while (elapsed <= duration && !stopped) {
-        progress.min = 0;
         progress.max = duration;
         progress.value = elapsed;
         elapsed += 1;
