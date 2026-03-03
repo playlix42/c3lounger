@@ -33,6 +33,14 @@ tr.history {
     color: #84858b;
 }
 
+#playarea>tbody>tr>td {
+    text-align: center;
+}
+
+#positiondata {
+    font-family: monospace;
+
+}
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #34353b;
@@ -46,6 +54,19 @@ tr.history {
     }
     #repolink {
         color: #202020;
+    }
+}
+
+@media (min-width: 801px) {
+    #playarea {
+        width: 100%;
+    }
+    #playpause {
+        width: 100%;
+    }
+    #playlist {
+        border-collapse: separate;
+        border-radius: 6px;
     }
 }
 @media (max-width: 800px) {

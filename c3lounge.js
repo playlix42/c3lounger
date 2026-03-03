@@ -86,19 +86,26 @@ function formatEntry(title, artist, durationHR, startUnix, endUnix) {
     return `${title} - ${artist} [${durationHR}] (from ${startUnix} to ${endUnix})`;
 }
 
-function addCell(text, parent) {
+function addCell(text, parent, columnName) {
     let cell = document.createElement("td");
     cell.innerText = text;
+    cell.setAttribute("data-label", columnName);
     parent.appendChild(cell);
     return
 }
 
-function addCellWithLink(text, link, parent) {
+function addCellWithLink(text, link, parent, columnName) {
+    let jail = window.location.search.includes("jail");
     let cell = document.createElement("td");
-    let cellLink = document.createElement("a");
-    cellLink.href = link;
-    cellLink.innerText = text;
-    cell.appendChild(cellLink);
+    cell.setAttribute("data-label", columnName);
+    if (jail) {
+        cell.innerText = text;
+    } else {
+        let cellLink = document.createElement("a");
+        cellLink.href = link;
+        cellLink.innerText = text;
+        cell.appendChild(cellLink);
+    }
     parent.appendChild(cell);
     return
 }
@@ -106,15 +113,20 @@ function addCellWithLink(text, link, parent) {
 function createEntry(index, entryData) {
     let entry = document.createElement("tr");
 
-    addCell(index.toString(), entry);
-    addCell(entryData.title, entry);
+    addCell(index.toString(), entry, "Index");
+    addCell(entryData.title, entry, "Title");
     const artistLink = entryData.artist.toLowerCase().replaceAll(" ", "-");
-    addCellWithLink(entryData.artist, `https://c3sets.de/artists/${artistLink}`, entry);
-    addCell(entryData.event, entry);
-    addCell(entryData.genre, entry);
-    addCell(entryData.durationHR, entry);
-    addCell(entryData.startUnix, entry);
-    addCell(entryData.endUnix, entry);
+    addCellWithLink(entryData.artist, `https://c3sets.de/artists/${artistLink}`, entry, "Artist");
+    addCell(entryData.event, entry, "Event");
+    addCell(entryData.genre, entry, "Genre");
+    addCell(entryData.durationHR, entry, "Duration");
+    addCell(entryData.startUnix, entry, "Start");
+    addCell(entryData.endUnix, entry, "End");
+    // the further back the entry is, the more faded it should be (hover will show full opacity)
+    if (index > 0) {
+        const opacity = Math.max(0.2, 1 - index * 0.2);
+        entry.style.opacity = opacity.toString();
+    }
 
     return entry;
 }
