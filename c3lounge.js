@@ -1,7 +1,7 @@
 function httpGet(url, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             callback(xhr.responseText);
         }
@@ -86,27 +86,19 @@ function formatEntry(title, artist, durationHR, startUnix, endUnix) {
     return `${title} - ${artist} [${durationHR}] (from ${startUnix} to ${endUnix})`;
 }
 
-function addCell(text, parent, columnName) {
+function addCell(text, parent) {
     let cell = document.createElement("td");
     cell.innerText = text;
-    cell.setAttribute("data-label", columnName);
     parent.appendChild(cell);
-
     return
 }
 
-function addCellWithLink(text, link, parent, columnName) {
-    let jail = window.location.search.includes("jail"); // in case we are in jail mode, do not actually create working links
+function addCellWithLink(text, link, parent) {
     let cell = document.createElement("td");
-    cell.setAttribute("data-label", columnName);
-    if (jail) {
-        cell.innerText = text;
-    } else {
-        let cellLink = document.createElement("a");
-        cellLink.href = link;
-        cellLink.innerText = text;
-        cell.appendChild(cellLink);
-    }
+    let cellLink = document.createElement("a");
+    cellLink.href = link;
+    cellLink.innerText = text;
+    cell.appendChild(cellLink);
     parent.appendChild(cell);
     return
 }
@@ -114,21 +106,15 @@ function addCellWithLink(text, link, parent, columnName) {
 function createEntry(index, entryData) {
     let entry = document.createElement("tr");
 
-    addCell(index, entry, "Index");
-    addCell(entryData.title, entry, "Title");
+    addCell(index.toString(), entry);
+    addCell(entryData.title, entry);
     const artistLink = entryData.artist.toLowerCase().replaceAll(" ", "-");
-    addCellWithLink(entryData.artist, `https://c3sets.de/artists/${artistLink}`, entry, "Artist");
-    addCell(entryData.event, entry, "Event");
-    addCell(entryData.genre, entry, "Genre");
-    addCell(entryData.durationHR, entry, "Duration");
-    addCell(entryData.startUnix, entry, "Start");
-    addCell(entryData.endUnix, entry, "End");
-
-    // the further back the entry is, the more faded it should be (hover will show full opacity)
-    if (index > 0) {
-        const opacity = Math.max(0.2, 1 - index * 0.2);
-        entry.style.opacity = opacity.toString();
-    }
+    addCellWithLink(entryData.artist, `https://c3sets.de/artists/${artistLink}`, entry);
+    addCell(entryData.event, entry);
+    addCell(entryData.genre, entry);
+    addCell(entryData.durationHR, entry);
+    addCell(entryData.startUnix, entry);
+    addCell(entryData.endUnix, entry);
 
     return entry;
 }
@@ -137,14 +123,14 @@ function displayData(data) {
     while (list.firstChild) {
         list.removeChild(list.firstChild);
     }
-    let entry = createEntry("Next", data.next);
+    let entry = createEntry(-1, data.next);
     entry.className = "next";
     list.appendChild(entry);
-    entry = createEntry("Now", data);
+    entry = createEntry(0, data);
     entry.className = "now";
     list.appendChild(entry);
     for (let i = 0; i < data.history.length; i++) {
-        entry = createEntry((i + 1).toString(), data.history[i]);
+        entry = createEntry((i + 1), data.history[i]);
         entry.className = "history";
         list.appendChild(entry);
     }
@@ -161,14 +147,11 @@ async function updateTrackPosition(duration, initialElapsed) {
     const position = document.getElementById("positiondata");
     let elapsed = initialElapsed;
     while (elapsed <= duration && !stopped) {
+        progress.min = 0;
         progress.max = duration;
         progress.value = elapsed;
         elapsed += 1;
         position.innerHTML = convertTime(elapsed) + " / " + convertTime(duration);
-        if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
-            const percent = elapsed / duration * 100;
-            progress.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
-        }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
@@ -182,8 +165,8 @@ async function resyncProgress() {
         stopped = false;
         const data = await response.json();
         const parsed = fetchData(data);
-        resyncTimer = setTimeout(resyncProgress, 60000 * 15);
-        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => { });
+        resyncTimer = setTimeout(resyncProgress, 60000*15);
+        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => {});
     } catch (err) {
         console.error("Resync error:", err);
         resyncTimer = setTimeout(resyncProgress, 60000);
@@ -199,22 +182,22 @@ async function requestAPI() {
         displayData(parsed);
         const delay = parsed.remaining;
         nextTimer = setTimeout(requestAPI, (delay + 30) * 1000);
-        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => { });
-        resyncTimer = setTimeout(resyncProgress, 60000 * 15);
+        updateTrackPosition(parsed.duration, parsed.elapsed).then(r => {});
+        resyncTimer = setTimeout(resyncProgress, 60000*15);
     } catch (err) {
         console.error("API error:", err);
         nextTimer = setTimeout(requestAPI, 300000);
     }
 }
-async function playpauseaction() {
+async function playpauseaction () {
 
 }
 let playpause = document.getElementById("playpause");
-playpause.addEventListener("click", function () {
+playpause.addEventListener("click", function() {
     const audio = document.getElementById("audio");
     if (audio.paused) {
         stopped = false;
-        requestAPI().then(r => { });
+        requestAPI().then(r => {});
         audio.src = "";
         audio.load();
         audio.src = "https://live.c3lounge.de/listen/c3lounge_radio/192.mp3";
@@ -236,7 +219,7 @@ const volumeslider = document.getElementById("volume");
 const minGain = 0.001;
 const maxGain = 1;
 
-volumeslider.addEventListener("input", function () {
+volumeslider.addEventListener("input", function() {
     const linearValue = parseFloat(this.value);
     if (linearValue <= 0) {
         audio.volume = 0;
@@ -246,10 +229,6 @@ volumeslider.addEventListener("input", function () {
     audio.volume = Math.min(1, Math.max(0, gain));
     localStorage.setItem("volume", audio.volume)
     localStorage.setItem("volumeSlider", linearValue);
-    if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
-        const percent = linearValue * 100;
-        volumeslider.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
-    }
 })
 
 const volume = localStorage.getItem("volume");
@@ -273,17 +252,12 @@ async function audiorestart() {
     //requestAPI().then(r => {});
 }
 
-audio.addEventListener("error", function () {
+audio.addEventListener("error", function() {
     console.error("Audio playback error:", audio.error);
-    audiorestart().then(r => { });
+    audiorestart().then(r => {});
 })
 
-audio.addEventListener("stalled", function () {
+audio.addEventListener("stalled", function() {
     console.warn("Audio playback stalled, restarting...");
-    audiorestart().then(r => { });
+    audiorestart().then(r => {});
 })
-
-if (navigator.userAgent.includes("Chrome") || navigator.userAgent.includes("Safari")) {
-    const percent = volumeslider.value * 100;
-    volumeslider.style.background = `linear-gradient(to right, #286cff ${percent}%, #ddd ${percent}%)`;
-}
