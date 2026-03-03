@@ -1,31 +1,12 @@
-/*#progress {
+#progress {
     pointer-events: none;
-}*/
-
-#playarea>tbody>tr>td {
-    text-align: center;
 }
 
-#positiondata {
-    font-family: monospace;
+#playlist {
+    border-collapse: separate;
+    border-radius: 6px;
+    border: solid black 1px;
 }
-
-@media (min-width: 801px) {
-    #playarea {
-        width: 100%;
-    }
-
-    #playpause {
-        width: 100%;
-    }
-
-    #playlist {
-        border-collapse: separate;
-        border-radius: 6px;
-        border: solid black 1px;
-    }
-}
-
 tr.next {
     background: #758aff;
 }
